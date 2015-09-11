@@ -118,5 +118,14 @@ embora tive que fazer algumas modificações:
 	`/etc/LatexMk`. No nosso caso, o script só funcionou depois de criar o
 	`.latexmkrc` no HOME, e incorporar o conteúdo acima ao (já existente)
 	`LatexMk` do `/etc`.
-5. Saia do docker com `exit` e reinicie o sharelatex com `sudo docker
-   restart sharelatex`.
+5. Saia do docker com `exit` e reinicie o sharelatex com `sudo docker restart sharelatex`.
+
+## Configurando o email
+
+TODO.
+
+Para configurar o email, entrei no docker e inseri as informações em
+`/etc/sharelatex/settings.coffee`, mas não funcionou. Também testei
+colocar as informações em
+`/var/www/sharelatex/web/config/settings.defaults.coffee`, mas também
+não funcionou (mesmo depois de reiniciar o docker sharelatex).

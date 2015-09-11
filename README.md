@@ -74,3 +74,49 @@ usei um seção a mais que o Diego enviou, e ficou assim:
 </VirtualHost>
 ```
 
+## Integrando o knitr
+
+Para integrar o knitr ao ShareLaTeX é necessário adicionar um script de
+inicialização do `latexmk`. Segui os passos desse link
+http://tex.stackexchange.com/questions/247369/install-knitr-on-own-sharelatex-server,
+embora tive que fazer algumas modificações:
+
+1. Entre no container do `sharelatex` com `sudo docker exec -it
+   sharelatex bash`
+2. Dentro do container, instale o R (adicionei o repositório do c3sl no
+   `/etc/apt/sources.list`) e o latexmk `apt-get install r-base
+   r-base-core r-base-dev latexmk`.
+3. Instale o `knitr` com suas dependências.
+4. Crie um arquivo `.latexmk` no HOME (nesse caso o HOME é `/root`) com
+o seguinte conteúdo:
+```
+my $root_file = $ARGV[-1];
+
+add_cus_dep( 'Rtex', 'tex', 0, 'rtex_to_tex');
+sub rtex_to_tex {
+    do_knitr("$_[0].Rtex");
+}
+
+sub do_knitr {
+    my $dirname = dirname $_[0];
+    my $basename = basename $_[0];
+    system("Rscript -e \"library('knitr'); setwd('$dirname'); knit('$basename')\"");
+}
+
+my $rtex_file = $root_file =~ s/\.tex$/.Rtex/r;
+unless (-e $root_file) {
+    if (-e $rtex_file) {
+        do_knitr($rtex_file);
+    }
+}
+```
+OBSERVAÇÃO: esses scripts de inicialiação do latexmk podem ficar no HOME
+com o `.latexmkrc`, ou em outros diretórios (veja no `man latexmkrc`)
+como: `/opt/local/share/latexmk`, `/usr/local/share/latexmk`,
+`/usr/local/lib/latexmk`, e o nome do arquivo deve ser `LatexMk` (com o
+mesmo conteúdo). O arquivo `LatexMk` também pode estar em
+`/etc/LatexMk`. No nosso caso, o script só funcionou depois de criar o
+`.latexmkrc` no HOME, e incorporar o conteúdo acima ao (já existente)
+`LatexMk` do `/etc`.
+5. Saia do docker com `exit` e reinicie o sharelatex com `sudo docker
+   restart sharelatex`.

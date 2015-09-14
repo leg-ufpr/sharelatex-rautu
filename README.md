@@ -85,10 +85,11 @@ configuração do nginx do sharelatex
 (`/etc/nginx/sites-enabled/sharelatex.conf`) adicione a seguinte linha:
 
 ```
-client_max_body_size 1000M;
+client_max_body_size 100M;
 ```
 
-para permitir o upload de arquivos de até 100 Mb.
+para permitir o upload de arquivos de até 100 Mb (ou qualquer outro
+tamanho desejado).
 
 ## Integrando o knitr
 

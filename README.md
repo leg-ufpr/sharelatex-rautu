@@ -51,6 +51,12 @@ sudo docker exec sharelatex tlmgr update --self
 sudo docker exec sharelatex tlmgr install scheme-full
 ```
 
+Por algum motivo, ainda não existe uma versão completamente funcional do
+LaTeX no docker do sharelatex. Dentro do docker mesmo, instale os
+pacotes necessários do latex. Além disso, instale os pacotes
+`texlive-lang-portuguese` para o `babel` funcionar, e
+`texlive-bibtex-extra` e `biber` para o `biblatex` funcionar.
+
 ## Configurando o Apache
 
 As configurações do Apache estão em

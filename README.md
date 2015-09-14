@@ -74,6 +74,22 @@ usei um seção a mais que o Diego enviou, e ficou assim:
 </VirtualHost>
 ```
 
+### Configurando o nginx dentro do docker
+
+Dentro do contâiner docker do sharelatex, o servidor utilizado é o
+nginx. Por padrão, o sharelatex não permite fazer o upload de arquivos
+com mais de 1 Mb, mas essa é uma restrição do servidor nginx. Para
+resolver isso, foi necessário acessar o container do `sharelatex` com
+`sudo docker exec -it sharelatex bash`. Depois, no arquivo de
+configuração do nginx do sharelatex
+(`/etc/nginx/sites-enabled/sharelatex.conf`) adicione a seguinte linha:
+
+```
+client_max_body_size 1000M;
+```
+
+para permitir o upload de arquivos de até 100 Mb.
+
 ## Integrando o knitr
 
 Para integrar o knitr ao ShareLaTeX é necessário adicionar um script de
